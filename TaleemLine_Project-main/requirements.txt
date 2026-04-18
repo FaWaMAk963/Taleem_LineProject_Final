@@ -1,5 +1,30 @@
-openai-whisper
-requests
-transitions
-pyttsx3
-gtts
+# TaleemLine – Python Dependencies
+# ──────────────────────────────────────────────────────────────────────────────
+# Install all at once:
+#   pip install -r requirements.txt
+#
+# NOTE: Ollama (the local LLM server) is NOT a pip package.
+#   Download it from https://ollama.com and run:
+#   ollama pull llama3
+#   ollama serve
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── GUI ───────────────────────────────────────────────────────────────────────
+PyQt5>=5.15.0                  # Phone-shell UI, signals, threading (ui.py, dial_screen.py)
+
+# ── Speech-to-Text ────────────────────────────────────────────────────────────
+openai-whisper>=20231117       # Offline speech recognition (stt_test.py)
+sounddevice>=0.4.6             # Microphone recording (stt_test.py)
+scipy>=1.11.0                  # WAV file writing for recorded audio (stt_test.py)
+
+# ── Text-to-Speech ────────────────────────────────────────────────────────────
+pyttsx3>=2.90                  # Offline TTS using Windows/macOS/Linux voices (voice_generator.py, ui.py)
+
+# ── AI / Ollama client ────────────────────────────────────────────────────────
+requests>=2.31.0               # HTTP calls to local Ollama API (brain_processor.py, taleem_main.py)
+
+# ── FSM ───────────────────────────────────────────────────────────────────────
+transitions>=0.9.0             # Finite state machine for session flow (taleem_main.py)
+
+# ── Standard library (no install needed) ─────────────────────────────────────
+# json, os, datetime, threading, queue, sys, argparse  — all built into Python
