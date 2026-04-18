@@ -33,9 +33,9 @@
 
 
 from transitions import Machine
-from io import stt_test
+from voice_io import stt_test
 import brain_processor
-from io import voice_generator
+from voice_io import voice_generator
 import os
 
 

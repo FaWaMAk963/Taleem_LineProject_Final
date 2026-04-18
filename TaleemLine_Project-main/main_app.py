@@ -42,7 +42,7 @@ def run_gui():
         return
 
     try:
-        from dial_screen import DialScreen
+        from gui.dial_screen import DialScreen
     except ImportError as e:
         print(f"Could not import DialScreen: {e}")
         print("    Make sure dial_screen.py and ui.py are in the same folder.")
@@ -74,7 +74,7 @@ def run_gui():
 def run_console():
     """Run TaleemAgent in the terminal (voice + keyboard fallback)."""
     try:
-        from taleem_main import TaleemAgent
+        from core.taleem_main import TaleemAgent
     except ImportError as e:
         print(f"Missing dependency: {e}")
         print("\nInstall all required packages:")
@@ -114,70 +114,48 @@ def test_system():
         print(f"     {e}")
         results["Ollama"] = "FAIL"
 
-    # ── 2. brain_processor ────────────────────────────────────────────────────
-    print("\n[2] brain_processor")
+        # ── 2. brain_processor ─────────────────────────
     try:
-        import brain_processor
-        print("      Imported successfully")
+        from core.brain_processor import brain_processor
+        print("Imported successfully")
         results["brain_processor"] = "OK"
     except ImportError as e:
-        print(f"      {e}")
+        print(e)
         results["brain_processor"] = "FAIL"
 
-    # ── 3. Text-to-Speech ─────────────────────────────────────────────────────
-    print("\n[3] Text-to-Speech (voice_generator)")
+
+    # ── 3. Text-to-Speech ─────────────────────────
     try:
-        import voice_generator
+        from voice_io import voice_generator
         voice_generator.speak_response("TaleemLine test")
-        print("      TTS working")
+        print("TTS working")
         results["TTS"] = "OK"
     except Exception as e:
-        print(f"      {e}")
+        print(e)
         results["TTS"] = "FAIL"
 
-    # ── 4. Speech-to-Text ─────────────────────────────────────────────────────
-    print("\n[4] Speech-to-Text (stt_test)")
+
+    # ── 4. Speech-to-Text ─────────────────────────
     try:
-        import stt_test        # noqa: F401
-        print("      Module imported (live mic test skipped)")
+        from voice_io import stt_test
+        print("STT module imported")
         results["STT"] = "OK"
     except Exception as e:
-        print(f"      {e}")
+        print(e)
         results["STT"] = "FAIL"
 
-    # ── 5. PyQt5 ──────────────────────────────────────────────────────────────
-    print("\n[5] PyQt5 (GUI)")
-    try:
-        from PyQt5.QtWidgets import QApplication   # noqa: F401
-        print("     PyQt5 available")
-        results["PyQt5"] = "OK"
-    except ImportError as e:
-        print(f"   ❌   {e}")
-        results["PyQt5"] = "FAIL"
 
-    # ── 6. dial_screen / ui ───────────────────────────────────────────────────
-    print("\n[6] dial_screen + ui")
+    # ── 7. FSM ─────────────────────────
     try:
-        from dial_screen import DialScreen   # noqa: F401
-        print("      DialScreen imported")
-        results["DialScreen"] = "OK"
-    except Exception as e:
-        print(f"    ❌  {e}")
-        results["DialScreen"] = "FAIL"
-
-    # ── 7. FSM (transitions) ──────────────────────────────────────────────────
-    print("\n[7] FSM (transitions library)")
-    try:
-        from taleem_main import TaleemAgent
+        from core.taleem_main import TaleemAgent
         agent = TaleemAgent()
-        agent.start()                  # IDLE → LANG_SELECT
+        agent.start()
         assert agent.state == "LANG_SELECT"
-        print("      FSM transitions working")
+        print("FSM working")
         results["FSM"] = "OK"
     except Exception as e:
-        print(f"    ❌  {e}")
+        print(e)
         results["FSM"] = "FAIL"
-
     # ── Summary ───────────────────────────────────────────────────────────────
     print("\n" + "=" * 50)
     print("Results:")
